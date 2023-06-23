@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const User = require('./models/User');
 const Post = require('./models/Post')
 const bcrypt = require('bcryptjs');
+const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const salt = bcrypt.genSaltSync(10);
 const cookieParser = require('cookie-parser');
@@ -13,15 +14,15 @@ const fs = require('fs');
 const app = express();
 const secrets = require('./secrets.js');
 
-
-app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(cors({credentials: true, origin: 'http://localhost:3001'}));
 app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(__dirname+'/uploads'));
-
-mongoose.connect(`mongodb+srv://${secrets.MONGO_USER}:${secrets.MONGO_PASSWORD}@mern-blog.wshyov0.mongodb.net/?retryWrites=true&w=majority`);
+mongoose.connect(`mongodb+srv://${secrets.MONGO_USER}:${secrets.MONGO_PASSWORD}@cluster0.ncabifs.mongodb.net/?retryWrites=true&w=majority`);
 
 app.post('/register', async (req, res) => {
+  console.log(req.body)
   const {username, password} = req.body;
   try {
     const userDoc = await User.create({username, password: bcrypt.hashSync(password, salt)});
@@ -72,11 +73,14 @@ app.post('/logout', (req,res) => {
 });
 
 app.post('/post', uploadMiddleware.single('file'), async (req,res) => {
-  const {originalname, path} = req.file;
-  const parts = originalname.split('.');
-  const ext = parts[parts.length - 1];
-  const newPath = path + '.' + ext;
-  fs.renameSync(path, newPath);
+  let newPath = "";
+  if(req.file) {
+    const {originalname, path} = req.file;
+    const parts = originalname.split('.');
+    const ext = parts[parts.length - 1];
+    newPath = path + '.' + ext;
+    fs.renameSync(path, newPath);
+  }
 
   const {token} = req.cookies;
   jwt.verify(token, secrets.SECRET_STRING, {}, async (err, info) => {
@@ -128,4 +132,4 @@ app.get('/post/:id', async (req,res) => {
   res.json(postDoc);
 });
 
-app.listen(4000);
+app.listen(3000);

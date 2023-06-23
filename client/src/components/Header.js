@@ -7,7 +7,7 @@ export default function Header() {
   const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:4000/profile', {
+    fetch('http://localhost:3000/profile', {
       credentials: 'include',
     }).then(res => {
       res.json().then(userInfo => {
@@ -17,7 +17,7 @@ export default function Header() {
   }, []);
 
   async function logout() {
-    await fetch('http://localhost:4000/logout', {
+    await fetch('http://localhost:3000/logout', {
       credentials: 'include',
       method: 'POST',
     });
@@ -29,7 +29,7 @@ export default function Header() {
   return (
     <header>
       <Link to="/" className="logo">
-        MyBlog
+        My Culinary Blog!
       </Link>
       <nav>
         {username && (
