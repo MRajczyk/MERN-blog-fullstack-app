@@ -1,6 +1,7 @@
 import { Link, Navigate } from 'react-router-dom';
 import { useEffect, useContext, useState } from 'react';
 import { UserContext } from '../contexts/UserContext';
+import { OPEN_WEATHER_API_KEY } from '../secrets'
 
 export default function Header() {
   const {setUserInfo, userInfo} = useContext(UserContext);
@@ -12,6 +13,12 @@ export default function Header() {
     }).then(res => {
       res.json().then(userInfo => {
         setUserInfo(userInfo);
+      });
+    })
+    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=51.76&lon=19.46&appid=${OPEN_WEATHER_API_KEY}`, {
+    }).then(res => {
+      res.json().then(x => {
+        console.log(x)
       });
     })
   }, []);
