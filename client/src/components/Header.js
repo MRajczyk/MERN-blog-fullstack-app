@@ -8,7 +8,7 @@ export default function Header() {
   const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:3000/profile', {
+    fetch('http://backend:5000/profile', {
       credentials: 'include',
     }).then(res => {
       res.json().then(userInfo => {
@@ -24,7 +24,7 @@ export default function Header() {
   }, []);
 
   async function logout() {
-    await fetch('http://localhost:3000/logout', {
+    await fetch('http://backend:5000/logout', {
       credentials: 'include',
       method: 'POST',
     });

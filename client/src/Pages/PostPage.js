@@ -9,7 +9,7 @@ export default function PostPage() {
   const {userInfo} = useContext(UserContext);
   const {id} = useParams();
   useEffect(() => {
-    fetch(`http://localhost:3000/post/${id}`, {credentials: 'include'}).then(response => {
+    fetch(`backend:5000/post/${id}`, {credentials: 'include'}).then(response => {
       response.json().then(postInfo => {
         setPostInfo(postInfo);
       });

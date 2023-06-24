@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  client:
+    build: ./client
+    container_name: react-ui
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+    stdin_open: true
+    tty: true
+    
+  backend:
+    build: ./api
+    container_name: node-api
+    restart: always
+    ports:
+      - "5000:5000"
+    depends_on:
+      - database
+    networks:
+      - app-network
+      
+  database:
+    image: mongo
+    container_name: mongo-db
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mikolajrajczyk01
+      MONGO_INITDB_ROOT_PASSWORD: 2WpMOJi1487n76s2
+    restart: always
+    volumes:
+      - ./mongo_data/:/data/db
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

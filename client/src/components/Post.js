@@ -7,7 +7,7 @@ export default function Post({_id, title, summary, cover, content, createdAt, au
       <div className="image">
         <Link to={`/post/${_id}`}>
           <img
-            src={'http://localhost:3000/' + cover}
+            src={'http://backend:5000/' + cover}
             alt="obrazek"
           ></img>
         </Link>

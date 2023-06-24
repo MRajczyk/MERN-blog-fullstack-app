@@ -15,11 +15,12 @@ const app = express();
 const secrets = require('./secrets.js');
 
 app.use(bodyParser.urlencoded({ extended: false }))
-app.use(cors({credentials: true, origin: 'http://localhost:3001'}));
+app.use(cors({credentials: true, origin: 'http://localhost:300'}));
 app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(__dirname+'/uploads'));
-mongoose.connect(`mongodb+srv://${secrets.MONGO_USER}:${secrets.MONGO_PASSWORD}@cluster0.ncabifs.mongodb.net/?retryWrites=true&w=majority`);
+//mongoose.connect(`mongodb+srv://${secrets.MONGO_USER}:${secrets.MONGO_PASSWORD}@cluster0.ncabifs.mongodb.net/?retryWrites=true&w=majority`);
+mongoose.connect('mongodb://${secrets.MONGO_USER}:${secrets.MONGO_PASSWORD}mongo:27017');
 
 app.post('/register', async (req, res) => {
   console.log(req.body)
@@ -132,4 +133,4 @@ app.get('/post/:id', async (req,res) => {
   res.json(postDoc);
 });
 
-app.listen(3000);
+app.listen(5000);
