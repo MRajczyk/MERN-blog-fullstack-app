@@ -140,7 +140,6 @@ app.get('/post/:id', async (req,res) => {
 });
 
 app.post('/post/delete/:id', async (req,res) => {
-  console.log("trying to delete post...")
   const {token} = req.cookies;
   jwt.verify(token, secrets.SECRET_STRING, {}, async (err, info) => {
     if(err) {
