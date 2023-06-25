@@ -1,4 +1,5 @@
 import {useState} from "react";
+import {API_URL} from "../secrets";
 
 export default function RegisterPage() {
   const [username, setUsername] = useState('');
@@ -6,7 +7,7 @@ export default function RegisterPage() {
 
   async function register(ev) {
     ev.preventDefault();
-    const response = await fetch('backend:5000/register', {
+    const response = await fetch(`${API_URL}/register`, {
       method: 'POST',
       body: JSON.stringify({username, password}),
       headers: {'Content-Type':'application/json'},

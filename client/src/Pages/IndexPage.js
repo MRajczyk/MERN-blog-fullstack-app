@@ -1,10 +1,11 @@
 import Post from '../components/Post'
 import {useEffect, useState} from 'react';
+import { API_URL } from '../secrets'
 
 export default function IndexPage() {
   const [posts,setPosts] = useState([]);
   useEffect(() => {
-      fetch('http://backend:5000/post', {credentials: 'include'}).then(response => {
+      fetch(`${API_URL}/post`, {credentials: 'include'}).then(response => {
         response.json().then(posts => {
           setPosts(posts);
         });

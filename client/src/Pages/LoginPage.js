@@ -1,6 +1,7 @@
 import {useContext, useState} from "react";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
+import { API_URL } from '../secrets'
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
@@ -10,7 +11,7 @@ export default function LoginPage() {
 
   async function login(ev) {
     ev.preventDefault();
-    const response = await fetch('http://localhost:3000/login', {
+    const response = await fetch(`${API_URL}/login`, {
       method: 'POST',
       body: JSON.stringify({username, password}),
       headers: {'Content-Type':'application/json'},

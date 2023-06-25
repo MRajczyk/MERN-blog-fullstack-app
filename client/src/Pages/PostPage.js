@@ -3,13 +3,14 @@ import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import { Link } from 'react-router-dom';
+import { API_URL } from '../secrets'
 
 export default function PostPage() {
   const [postInfo, setPostInfo] = useState(null);
   const {userInfo} = useContext(UserContext);
   const {id} = useParams();
   useEffect(() => {
-    fetch(`backend:5000/post/${id}`, {credentials: 'include'}).then(response => {
+    fetch(`${API_URL}/post/${id}`, {credentials: 'include'}).then(response => {
       response.json().then(postInfo => {
         setPostInfo(postInfo);
       });

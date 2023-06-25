@@ -2,6 +2,7 @@ import { useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
 import { Navigate } from 'react-router-dom';
 import Editor from '../components/Editor';
+import { API_URL } from '../secrets'
 
 export default function CreatePost() {
   const [title,setTitle] = useState('');
@@ -17,7 +18,7 @@ export default function CreatePost() {
     data.set('content', content);
     data.set('file', files[0]);
     ev.preventDefault();
-    const response = await fetch('backend:5000/post', {
+    const response = await fetch(`${API_URL}/post`, {
       method: 'POST',
       body: data,
       credentials: 'include',

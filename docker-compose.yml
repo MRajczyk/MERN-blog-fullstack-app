@@ -1,6 +1,17 @@
 version: '3.8'
 
 services:
+  database:
+    image: mongo:latest
+    container_name: mongo-db
+    ports:
+      - "27017:27017"
+    restart: always
+    volumes:
+      - mongodata:/data/db
+    networks:
+      - app-network
+      
   client:
     build: ./client
     container_name: react-ui
@@ -14,7 +25,9 @@ services:
     tty: true
     
   backend:
-    build: ./api
+    build:
+      context: ./api
+      dockerfile: Dockerfile
     container_name: node-api
     restart: always
     ports:
@@ -23,21 +36,10 @@ services:
       - database
     networks:
       - app-network
-      
-  database:
-    image: mongo
-    container_name: mongo-db
-    ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: mikolajrajczyk01
-      MONGO_INITDB_ROOT_PASSWORD: 2WpMOJi1487n76s2
-    restart: always
-    volumes:
-      - ./mongo_data/:/data/db
-    networks:
-      - app-network
 
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  mongodata:

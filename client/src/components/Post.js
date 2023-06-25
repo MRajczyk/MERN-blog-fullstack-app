@@ -1,5 +1,6 @@
 import {format} from 'date-fns';
 import { Link } from 'react-router-dom';
+import { API_URL } from '../secrets'
 
 export default function Post({_id, title, summary, cover, content, createdAt, author}) {
   return (
@@ -7,7 +8,7 @@ export default function Post({_id, title, summary, cover, content, createdAt, au
       <div className="image">
         <Link to={`/post/${_id}`}>
           <img
-            src={'http://backend:5000/' + cover}
+            src={`${API_URL}` + cover}
             alt="obrazek"
           ></img>
         </Link>

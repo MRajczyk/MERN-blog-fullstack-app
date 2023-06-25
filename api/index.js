@@ -15,12 +15,12 @@ const app = express();
 const secrets = require('./secrets.js');
 
 app.use(bodyParser.urlencoded({ extended: false }))
-app.use(cors({credentials: true, origin: 'http://localhost:300'}));
+app.use(cors({credentials: true, origin: 'http://react-ui:3000'}));
 app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(__dirname+'/uploads'));
 //mongoose.connect(`mongodb+srv://${secrets.MONGO_USER}:${secrets.MONGO_PASSWORD}@cluster0.ncabifs.mongodb.net/?retryWrites=true&w=majority`);
-mongoose.connect('mongodb://${secrets.MONGO_USER}:${secrets.MONGO_PASSWORD}mongo:27017');
+mongoose.connect(`mongodb://database:27017`);
 
 app.post('/register', async (req, res) => {
   console.log(req.body)
@@ -133,4 +133,11 @@ app.get('/post/:id', async (req,res) => {
   res.json(postDoc);
 });
 
-app.listen(5000);
+app.get('/hello', async (req,res) => {
+  console.log("request inbound!")
+  res.json({"message": "hello world!"});
+});
+
+app.listen(5000, '0.0.0.0', () => {
+  console.log(`Running on http://0.0.0.0:5000`);
+});

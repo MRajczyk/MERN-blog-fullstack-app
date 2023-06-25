@@ -1,7 +1,7 @@
 # Dockerfile for node api
 
 # Build node api
-FROM node:10.18-alpine
+FROM node:17.3-alpine
 
 # Working directory be app
 WORKDIR /app

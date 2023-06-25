@@ -1,14 +1,14 @@
 import { Link, Navigate } from 'react-router-dom';
 import { useEffect, useContext, useState } from 'react';
 import { UserContext } from '../contexts/UserContext';
-import { OPEN_WEATHER_API_KEY } from '../secrets'
+import { OPEN_WEATHER_API_KEY, API_URL } from '../secrets'
 
 export default function Header() {
   const {setUserInfo, userInfo} = useContext(UserContext);
   const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
-    fetch('http://backend:5000/profile', {
+    fetch(`${API_URL}/profile`, {
       credentials: 'include',
     }).then(res => {
       res.json().then(userInfo => {
@@ -24,7 +24,7 @@ export default function Header() {
   }, []);
 
   async function logout() {
-    await fetch('http://backend:5000/logout', {
+    await fetch(`${API_URL}/logout`, {
       credentials: 'include',
       method: 'POST',
     });
