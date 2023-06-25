@@ -1,14 +1,17 @@
 import { formatISO9075 } from "date-fns";
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import {Navigate, useParams} from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import { Link } from 'react-router-dom';
 import { API_URL } from '../secrets'
+import axios from "axios";
 
 export default function PostPage() {
   const [postInfo, setPostInfo] = useState(null);
   const {userInfo} = useContext(UserContext);
   const {id} = useParams();
+  const [redirect, setRedirect] = useState(false);
+
   useEffect(() => {
     fetch(`${API_URL}/post/${id}`, {credentials: 'include'}).then(response => {
       response.json().then(postInfo => {
@@ -21,6 +24,21 @@ export default function PostPage() {
     return '';
   }
 
+  async function deletePost() {
+    const response = await fetch(`${API_URL}/post/delete/${id}`, {
+      method: 'POST',
+      credentials: 'include',
+    })
+    if(response.status === 200) {
+      setRedirect(true);
+    } else {
+      alert('Error deleting post');
+    }
+  }
+
+  if(redirect) {
+    return <Navigate to={'/'} />
+  }
   return (
     <div className="post-page">
       <h1>{postInfo.title}</h1>
@@ -34,10 +52,14 @@ export default function PostPage() {
             </svg>
             Edit this post
           </Link>
+          <br></br>
+          <Link className="edit-btn" onClick={deletePost}>
+            Delete this post
+          </Link>
         </div>
       )}
       <div className="image">
-      <img src={`http://localhost:3000/${postInfo.cover}`} alt='obrazek' />
+      <img src={`${API_URL}/${postInfo.cover}`} alt='obrazek' />
       </div>
       <div className="content" dangerouslySetInnerHTML={{__html:postInfo.content}}/>
     </div>

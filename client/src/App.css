@@ -176,6 +176,7 @@ div.edit-row {
 }
 
 div.post-page a.edit-btn {
+  margin-top: 10px;
   background-color: #333;
   display: inline-flex;
   align-items: center;

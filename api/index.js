@@ -19,8 +19,8 @@ app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(__dirname+'/uploads'));
-//mongoose.connect(`mongodb+srv://${secrets.MONGO_USER}:${secrets.MONGO_PASSWORD}@cluster0.ncabifs.mongodb.net/?retryWrites=true&w=majority`);
-mongoose.connect(`mongodb://database:27017`);
+mongoose.connect(`mongodb+srv://${secrets.MONGO_USER}:${secrets.MONGO_PASSWORD}@cluster0.ncabifs.mongodb.net/?retryWrites=true&w=majority`);
+// mongoose.connect(`mongodb://database:27017`);
 
 app.post('/register', async (req, res) => {
   console.log(req.body)
@@ -85,7 +85,10 @@ app.post('/post', uploadMiddleware.single('file'), async (req,res) => {
 
   const {token} = req.cookies;
   jwt.verify(token, secrets.SECRET_STRING, {}, async (err, info) => {
-    if(err) throw err;
+    if(err) {
+      console.log(err)
+      return res.status(422).json("failed to authenticate");
+    }
     const {title, summary, content} = req.body;
     const postDoc = await Post.create({
       title,
@@ -110,7 +113,10 @@ app.put('/post', uploadMiddleware.single('file'), async(req,res) => {
 
   const {token} = req.cookies;
   jwt.verify(token, secrets.SECRET_STRING, {}, async (err, info) => {
-    if(err) throw err;
+    if(err) {
+      console.log(err)
+      return res.status(422).json("failed to authenticate");
+    }
     const {id, title, summary, content} = req.body;
     const postDoc = await Post.findById(id);
     const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(info.id);
@@ -131,6 +137,30 @@ app.get('/post/:id', async (req,res) => {
   const {id} = req.params;
   const postDoc = await Post.findById(id).populate('author', 'username');
   res.json(postDoc);
+});
+
+app.post('/post/delete/:id', async (req,res) => {
+  console.log("trying to delete post...")
+  const {token} = req.cookies;
+  jwt.verify(token, secrets.SECRET_STRING, {}, async (err, info) => {
+    if(err) {
+      console.log(err)
+      return res.status(422).json("failed to authenticate");
+    }
+    const {id} = req.params;
+    const postDoc = await Post.findById(id);
+    const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(info.id);
+    if(!isAuthor) {
+      return res.status(400).json('You are not the author!');
+    }
+    try {
+      await Post.deleteOne({_id: id});
+      return res.status(200).json("success!");
+    } catch (e) {
+      console.log('cootas')
+      return res.status(422).json("failed to delete");
+    }
+  });
 });
 
 app.get('/hello', async (req,res) => {
