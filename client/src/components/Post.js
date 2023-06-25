@@ -8,7 +8,7 @@ export default function Post({_id, title, summary, cover, content, createdAt, au
       <div className="image">
         <Link to={`/post/${_id}`}>
           <img
-            src={`${API_URL}` + cover}
+            src={`${API_URL}/` + cover}
             alt="obrazek"
           ></img>
         </Link>
